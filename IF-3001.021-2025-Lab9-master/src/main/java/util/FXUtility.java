@@ -61,4 +61,7 @@ public class FXUtility {
             return "YES";
         else return "NO";
     }
+
+    public static void showErrorAlert(String error, String s) {
+    }
 }
