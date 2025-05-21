@@ -18,10 +18,16 @@ class BTreeTest {
             System.out.println("BTree max: " + bTree.max());
             System.out.println("BTree min: " + bTree.min());
             System.out.println("BTree height: " + bTree.height());
-            System.out.println("BTree remove number 20");
-            bTree.remove(40);
+            System.out.println("BTree: -" + bTree.printNodes1Child());
+            System.out.println("BTree: " + bTree.printNodes2Children());
+            System.out.println("BTree remove ");
+            bTree.remove(25);
+            System.out.println(bTree);
+
         } catch (TreeException e) {
+
             throw new RuntimeException(e);
+
         }
     }
 }

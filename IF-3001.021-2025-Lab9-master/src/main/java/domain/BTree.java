@@ -30,30 +30,30 @@ public class BTree implements Tree {
     @Override
     public boolean contains(Object element) throws TreeException {
 
-        if (root == null) {
+        if (isEmpty()) {
             throw new TreeException("Binary Tree is empty");
         }
-        return simpleSearch(root, element);
+        return binarySearch(root, element);
 
     }
 
-    private boolean simpleSearch(BTreeNode node, Object element) {
+    private boolean binarySearch(BTreeNode node, Object element) {
         if (node == null) {
             return false; // El elemento no se encontro
         }
 
         // Compara el elemento actual
-        if (node.data.equals(element)) {
+        if (util.Utility.compare(node.data , element) == 0) {
             return true; // El elemento se encontró
         }
 
         // Busca en el subárbol izquierdo
-        if (simpleSearch(node.left, element)) {
+        if (binarySearch(node.left, element)) {
             return true;
         }
 
         // Busca en el subárbol derecho
-        return simpleSearch(node.right, element);
+        return binarySearch(node.right, element);
     }
 
 
@@ -294,7 +294,7 @@ public class BTree implements Tree {
 
     @Override
     public String toString() {
-        String result="Binary Tree Content:";
+        String result= "Binary Tree Content:";
         try {
             result = "PreOrder: "+preOrder();
             result+= "\nInOrder: "+inOrder();
@@ -347,7 +347,9 @@ public class BTree implements Tree {
             return "";
         else {
             String result = "";
-            if (node.left != null && node.right != null) {
+            if (node.left != null && node.right != null) {{
+
+            }
                 result += node.data.toString() + " ";
             }
             return result + printNodes2Children(node.left) + printNodes2Children(node.right);
