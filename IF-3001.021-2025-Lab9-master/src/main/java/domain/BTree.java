@@ -1,6 +1,6 @@
 package domain;
 
-public class BTree implements  Tree {
+public class BTree implements Tree {
     private BTreeNode root; //se refiere a la raiz del arbol
 
     @Override
@@ -100,6 +100,8 @@ public class BTree implements  Tree {
 
     }
 
+
+
     private BTreeNode remove(BTreeNode node, Object element) throws TreeException {
         if (node == null) {
             return null; // Elemento no encontrado o subárbol vacío
@@ -134,8 +136,33 @@ public class BTree implements  Tree {
 
     @Override
     public int height(Object element) throws TreeException {
-        return 0;
+        if (isEmpty()) {
+            throw new TreeException("Binary Tree is empty");
+        }
+        return height(root, element);
     }
+
+    private int height(BTreeNode node, Object element) {
+        if (node == null) {
+            return -1; // Elemento no encontrado en este subárbol
+        }
+
+        if (node.data.equals(element)) {
+            return 0; // Elemento encontrado en este nodo, su altura es 0 relativa a él
+        }
+
+        int leftHeight = height(node.left, element);
+        int rightHeight = height(node.right, element);
+
+        if (leftHeight == -1 && rightHeight == -1) {
+            return -1; // Elemento no encontrado en ninguno de los subárboles
+        } else if (leftHeight != -1) {
+            return 1 + leftHeight; // Elemento encontrado en el subárbol izquierdo
+        } else {
+            return 1 + rightHeight; // Elemento encontrado en el subárbol derecho
+        }
+    }
+
 
     @Override
     public int height() throws TreeException {
@@ -278,7 +305,6 @@ public class BTree implements  Tree {
         }
         return result;
     }
-
     public String printLeaves() throws TreeException {
         if(isEmpty())
             throw new TreeException("Binary Tree is empty");
@@ -287,9 +313,11 @@ public class BTree implements  Tree {
     private String printLeaves(BTreeNode node){
         if(node==null) return "";
         else{
-
+            if(node.left==null && node.right==null) // Es una hoja
+                return node.data.toString() + " ";
+            else
+                return printLeaves(node.left) + printLeaves(node.right);
         }
-        return ""; //corregir para el retorno correcto
     }
 
     public String printNodes1Child() throws TreeException {
@@ -301,9 +329,12 @@ public class BTree implements  Tree {
         if (node == null)
             return "";
         else {
-
+            String result = "";
+            if ((node.left != null && node.right == null) || (node.left == null && node.right != null)) {
+                result += node.data.toString() + " ";
+            }
+            return result + printNodes1Child(node.left) + printNodes1Child(node.right);
         }
-        return "";
     }
 
     public String printNodes2Children() throws TreeException {
@@ -315,8 +346,11 @@ public class BTree implements  Tree {
         if (node == null)
             return "";
         else {
-
+            String result = "";
+            if (node.left != null && node.right != null) {
+                result += node.data.toString() + " ";
+            }
+            return result + printNodes2Children(node.left) + printNodes2Children(node.right);
         }
-        return ""; //corregir para el retorno correcto
     }
 }
