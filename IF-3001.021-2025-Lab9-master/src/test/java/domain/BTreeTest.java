@@ -13,8 +13,16 @@ class BTreeTest {
         }
         System.out.println(bTree);
         try {
+
+            for (int i = 0; i <20 ; i++) {
+
+                int value = util.Utility.random(50);
+                System.out.println( bTree.contains(value) ?
+                        "The value [ " + value + "] exists in the binary tree":"The value [" + value + " ] does not exists ");
+
+            }
+
             System.out.println("BTree size: "+bTree.size());
-            System.out.println("BTree contains: " + bTree.contains(40));
             System.out.println("BTree max: " + bTree.max());
             System.out.println("BTree min: " + bTree.min());
             System.out.println("BTree height: " + bTree.height());
