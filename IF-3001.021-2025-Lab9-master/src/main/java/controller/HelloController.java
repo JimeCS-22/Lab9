@@ -57,8 +57,7 @@ public class HelloController {
         }
 
         @FXML
-        void exampleOnMousePressed(MouseEvent event) {
+        public void exampleOnMousePressed(javafx.scene.input.MouseEvent mouseEvent) {
+         }
 
-        }
-
-    }
+}

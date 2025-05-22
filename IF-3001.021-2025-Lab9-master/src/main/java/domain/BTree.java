@@ -359,7 +359,31 @@ public class BTree implements Tree {
 
     private String printNodesWithChildren(BTreeNode node){
 
-        return printNodesWithChildren(node.left);
+        if (node == null) return "";
+
+        String result = "";
+
+        if (node.left != null || node.right == null){
+
+            result += "Node " + node.data + " children " ;
+
+            if (node.left != null) {
+                result += node.left.data + "" ;
+            }
+
+            if (node.right != null){
+
+                result += node.right.data + "";
+
+            }
+
+            result += "\n";
+        }
+
+        result += printNodesWithChildren(node.left);
+        result += printNodesWithChildren(node.right);
+
+        return result;
 
     }
 
@@ -386,8 +410,20 @@ public class BTree implements Tree {
     }
 
     private int totalLeaves(BTreeNode node){
+            if (node == null) {
+                return 0;  // Si el nodo es nulo, no hay hojas en este subárbol
+            }
 
-        return totalLeaves(node.left);
+            // Si el nodo no tiene hijos (es una hoja)
+            if (node.left == null && node.right == null) {
+                return 1;  // Contamos esta hoja
+            }
+
+            // Recursión en los subárboles izquierdo y derecho
+            return  totalLeaves(node.left) + totalLeaves(node.right);
+
     }
+
+
 
 }
