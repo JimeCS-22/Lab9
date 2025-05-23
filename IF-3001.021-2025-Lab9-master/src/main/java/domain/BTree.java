@@ -3,13 +3,6 @@ package domain;
 public class BTree implements Tree {
     private BTreeNode root; //se refiere a la raiz del arbol
 
-    public BTreeNode getRoot() {
-        return root;
-    }
-    public void setRoot(BTreeNode root) {
-        this.root = root;
-    }
-
     @Override
     public int size() throws TreeException {
         if(isEmpty())
@@ -104,110 +97,81 @@ public class BTree implements Tree {
 
 
     private BTreeNode remove(BTreeNode node, Object element) throws TreeException {
-        if (node != null) {
-            if (util.Utility.compare(node.data, element) < 0) {
-                //caso1, es un nodo sin hijos, es una hoja
-                if (node.left == null && node.right == null) {
-                    return null;
-                }
-                //Caso2-a, el nodo solo tiene un hijo izq
-                else if (node.left != null && node.right == null) {
-                   // node.left = newPath(node.left, node.path);
-                    return node.left;
-                }
-                //Caso2-b, el nodo solo tiene un hijo der
-                else if (node.left == null && node.right != null) {
-                   // node.right = newPath(node.right, node.path);
-                    return node.right;
+        if (node == null) {
+            return null; // Elemento no encontrado o subárbol vacío
+        }
 
-                }
-                //Caso3, el nodo tiene dos hijos
-                else if (node.left != null && node.right != null) {
-                    /**
-                     * El algoritmo de supresión dice que cuando el nodo a suprimir
-                     * tiene dos hijos, entonces busque una hoja del subarbol derecho
-                     * y sustituye la data del nodo a suprimir por la data de esa hoja,
-                     * luego elimine esa hoja
-                     */
-                    Object value = getLeaf(node.right);
-                    node.data = value;
-                    node.right = removeLeaf(node.right, value, false);
-                }
+        // Si encontramos el nodo a eliminar
+        if (node.data.equals(element)) {
+            // Caso 1: El nodo a suprimir no tiene hijos (es una hoja)
+            if (node.left == null && node.right == null) {
+                return null; // Simplemente lo eliminamos
             }
-            node.left = remove(node.left, element); //llamado recursivo por la izq
-            node.right = remove(node.right, element); //llamado recursivo por la der
+            // Caso 2: El nodo a suprimir solo tiene un hijo
+            else if (node.left == null) {
+                return node.right; // Lo reemplazamos con su hijo derecho
+            } else if (node.right == null) {
+                return node.left; // Lo reemplazamos con su hijo izquierdo
+            }
+            // Caso 3: El nodo a suprimir tiene dos hijos
+            BTreeNode maxNodeInLeftSubtree = (BTreeNode) max();
+            node.data = maxNodeInLeftSubtree.data; // Reemplazamos el valor del nodo actual
+            node.path = maxNodeInLeftSubtree.path; // Opcional: también copiar la ruta si es relevante
+            // Ahora, eliminamos el nodo que hemos movido (el maxNodeInLeftSubtree) del subárbol izquierdo
+            node.left = remove(node.left, maxNodeInLeftSubtree.data);
+            return node;
         }
-        return node;// retorna el nodo modificado
-    }
 
-    private Object getLeaf(BTreeNode node) {
-        Object aux;
-        if(node==null) return null;
-        else if(node.left==null && node.right==null) return node.data; //Es una hoja
-        else {
-            aux = getLeaf(node.left); // siga bajando por el subarbol izq
-            if(aux==null) aux = getLeaf(node.right);
-        }
-        return aux;
-
-    }
-
-    private BTreeNode removeLeaf(BTreeNode node, Object value, boolean removed) {
-        if(node==null) return null;
-        //Si es una hoja y esa hoja es la que estamos buscando la eliminamos
-        else if(node.left==null && node.right==null&&util.Utility.compare(node.data, value)==0) {
-            removed = true; // ya eliminó la hoja
-            return null;
-        }else {
-            if(!removed) node.left = removeLeaf(node.left, value, removed);
-            else if(!removed) node.right = removeLeaf(node.right, value, removed);
-        }
+        // Si no es el nodo, buscamos en los subárboles
+        node.left = remove(node.left, element);
+        node.right = remove(node.right, element);
         return node;
     }
 
-    //Número de ancestros
     @Override
     public int height(Object element) throws TreeException {
         if (isEmpty()) {
             throw new TreeException("Binary Tree is empty");
         }
-        return height(root, element, 0);
+        return height(root, element);
     }
 
-    //Número de ancestros
-    private int height(BTreeNode node, Object element, int level) {
-        if (node == null)
-            return 0; // Elemento no encontrado en este subárbol
-        else if (util.Utility.compare(node.data, element) == 0) return level;
-        else return Math.max(height(node.left, element, ++level),
-                    height(node.right, element, level));
+    private int height(BTreeNode node, Object element) {
+        if (node == null) {
+            return -1; // Elemento no encontrado en este subárbol
+        }
+
+        if (node.data.equals(element)) {
+            return 0; // Elemento encontrado en este nodo, su altura es 0 relativa a él
+        }
+
+        int leftHeight = height(node.left, element);
+        int rightHeight = height(node.right, element);
+
+        if (leftHeight == -1 && rightHeight == -1) {
+            return -1; // Elemento no encontrado en ninguno de los subárboles
+        } else if (leftHeight != -1) {
+            return 1 + leftHeight; // Elemento encontrado en el subárbol izquierdo
+        } else {
+            return 1 + rightHeight; // Elemento encontrado en el subárbol derecho
+        }
     }
 
-    //La altura max de la raíz hasta cualquier hoja
+
     @Override
     public int height() throws TreeException {
 
         if (isEmpty())
             throw new TreeException("Binary Tree is empty");
 
-        //return height(root, 0);//Opción 1
-        return height(root); //opción 2
+        return height(root);
     }
 
-    //La altura max de la raíz hasta cualquier hoja
-
-    //Opción1
-    private int height(BTreeNode node, int level) {
-        if (node == null)
-            return level - 1; //Se le resta 1 al nivel pq no cuente el nulo
-        return Math.max(height(node.left, ++level),
-                height(node.right, level));
-    }
-
-    //Opción 2
-    private int height(BTreeNode node){
-        if(node==null) return -1; //Retorna valor negativo para eliminar el nivel del nulo
-        return Math.max(height(node.left),height(node.right))+1;
+    private int height(BTreeNode node) {
+        if (node == null) {
+            return -1;
+        }
+        return 1 + Math.max(height(node.left), height(node.right));
     }
 
     @Override
@@ -228,11 +192,11 @@ public class BTree implements Tree {
         Object rightMin = min(node.right);
 
         // Comparar con el mínimo del subárbol izquierdo
-        if (leftMin != null && ((Comparable) leftMin).compareTo(currentMin) < 0) {
+        if (leftMin != null && (util.Utility.compare(leftMin , currentMin)<0)){
             currentMin = leftMin;
         }
         // Comparar con el mínimo del subárbol derecho
-        if (rightMin != null && ((Comparable) rightMin).compareTo(currentMin) < 0) {
+        if (rightMin != null && (util.Utility.compare(rightMin , currentMin)<0)) {
             currentMin = rightMin;
         }
         return currentMin;
@@ -256,11 +220,11 @@ public class BTree implements Tree {
         Object rightMax = max(node.right);
 
         // Comparar con el máximo del subárbol izquierdo
-        if (leftMax != null && ((Comparable) leftMax).compareTo(currentMax) > 0) {
+        if (leftMax != null && (util.Utility.compare(leftMax , currentMax) >0)){
             currentMax = leftMax;
         }
         // Comparar con el máximo del subárbol derecho
-        if (rightMax != null && ((Comparable) rightMax).compareTo(currentMax) > 0) {
+        if (rightMax != null && (util.Utility.compare(rightMax , currentMax)>0)) {
             currentMax = rightMax;
         }
         return currentMax;
@@ -433,9 +397,28 @@ public class BTree implements Tree {
 
     private String printSubTree(BTreeNode node){
 
+        if (node == null) {
+            return ""; // Caso base: si el nodo es nulo, devuelve una cadena vacía.
+        }
 
-        return printSubTree(node.left);
+        // Lo utilizo para que la salida sea parecida al del profe
+        String result = node.data.toString();
+
+        // Recorre los subárboles izquierdo y derecho.
+        String leftResult = printSubTree(node.left);
+        if (!leftResult.isEmpty()) {
+            result += ", " + leftResult;
+        }
+
+        String rightResult = printSubTree(node.right);
+        if (!rightResult.isEmpty()) {
+            result += ", " + rightResult;
+        }
+
+        return result;
+
     }
+
 
     public int totalLeaves() throws TreeException{
 

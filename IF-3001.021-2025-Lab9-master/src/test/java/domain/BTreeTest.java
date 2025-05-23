@@ -22,8 +22,14 @@ class BTreeTest {
 
             }
 
+
+
             System.out.println(bTree.printNodesWithChildren());
             System.out.println("Binary tree - total leaves: " + bTree.totalLeaves());
+            System.out.println();
+
+            System.out.println("Binary tree:" + bTree.printSubTree());
+            System.out.println();
 
             System.out.println("BTree size: " + bTree.size());
             System.out.println("BTree max: " + bTree.max());
