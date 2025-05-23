@@ -62,6 +62,29 @@ public class FXUtility {
         else return "NO";
     }
 
-    public static void showErrorAlert(String error, String s) {
+    public static void showErrorAlert(String title, String message) {
+
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setContentText(message);
+
+        // Mostrar la alerta
+        alert.showAndWait();
+    }
+
+    public static void showMessage(String title, String msg){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setContentText(msg);
+        alert.showAndWait();
+    }
+
+    public static Optional<ButtonType> showAlert(String title, String message, Alert.AlertType information) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null); // Sin encabezado
+        alert.setContentText(message);
+        alert.showAndWait();
+        return null;
     }
 }

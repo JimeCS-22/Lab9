@@ -15,7 +15,7 @@
             <children>
                 <Pane prefHeight="83.0" prefWidth="790.0" style="-fx-background-color: #536dde;">
                     <children>
-                        <Text fx:id="txtMessage" layoutX="48.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Graphic Binary Tree" textAlignment="CENTER" wrappingWidth="642.94921875">
+                        <Text fx:id="txtMessage" layoutX="161.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Graphic Binary Tree" textAlignment="CENTER" wrappingWidth="468.94921875">
                             <font>
                                 <Font name="Serif Regular" size="47.0" />
                             </font>
@@ -38,28 +38,49 @@
                         </Text>
                     </children>
                 </Pane>
-                <Pane layoutX="-10.0" layoutY="266.0" prefHeight="417.0" prefWidth="790.0" style="-fx-background-color: radial-gradient(focus-angle 0.0deg, focus-distance 0.0% , center 49.4475% 46.2085%, radius 29.3103%, #ffffff 0.0%, #6b85e4 100.0%);">
-                    <children>
-                        <Pane layoutY="-122.0" prefHeight="533.0" prefWidth="790.0" style="-fx-background-color: #4053A9;" />
-                        <Pane layoutX="10.0" layoutY="-122.0" prefHeight="570.0" prefWidth="790.0" style="-fx-background-color: #4053A9;" />
-                    </children>
-                </Pane>
                 <Pane fx:id="buttonPane" layoutX="11.0" layoutY="647.0" prefHeight="72.0" prefWidth="769.0" />
-                <Button fx:id="autoButton1" layoutX="113.0" layoutY="90.0" mnemonicParsing="false" onAction="#randomizeOnAction" prefHeight="37.0" prefWidth="165.0" style="-fx-background-radius: 15; -fx-background-color: #9b9b9b;" text="Randomize">
+                <Button fx:id="autoButton1" layoutX="14.0" layoutY="109.0" mnemonicParsing="false" onAction="#randomizeOnAction" prefHeight="37.0" prefWidth="165.0" style="-fx-background-radius: 15; -fx-background-color: #9b9b9b;" text="Randomize">
                     <font>
                         <Font name="Arial" size="20.0" />
                     </font>
                 </Button>
-                <Button fx:id="tourInfoButton" layoutX="504.0" layoutY="90.0" mnemonicParsing="false" onAction="#tourInfoOnAction" prefHeight="37.0" prefWidth="165.0" style="-fx-background-radius: 15; -fx-background-color: #9b9b9b;" text="Tour Info">
+                <Button fx:id="inOrderButton" layoutX="384.0" layoutY="109.0" mnemonicParsing="false" onAction="#inOrderOnAction" prefHeight="37.0" prefWidth="165.0" style="-fx-background-radius: 15; -fx-background-color: #9b9b9b;" text="In Order">
                     <font>
                         <Font name="Arial" size="20.0" />
                     </font>
                 </Button>
-                <Button fx:id="levelsButton" layoutX="313.0" layoutY="90.0" mnemonicParsing="false" onAction="#levelsOnAction" prefHeight="37.0" prefWidth="165.0" style="-fx-background-radius: 15; -fx-background-color: #9b9b9b;" text="Levels">
+                <Button fx:id="preOrderButton" layoutX="197.0" layoutY="109.0" mnemonicParsing="false" onAction="#preOrderOnAction" prefHeight="37.0" prefWidth="165.0" style="-fx-background-radius: 15; -fx-background-color: #9b9b9b;" text="Pre Order">
                     <font>
                         <Font name="Arial" size="20.0" />
                     </font>
                 </Button>
+                  <Pane fx:id="treePane" layoutY="189.0" onScroll="#handleScrollZoom" prefHeight="530.0" prefWidth="790.0" style="-fx-background-color: #536dde;" />
+            <Text fx:id="ordertxtMessage" layoutX="149.0" layoutY="182.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Pre Order Transversal Tour (N-L-R)" textAlignment="CENTER" wrappingWidth="492.94921875">
+               <font>
+                  <Font name="Serif Regular" size="30.0" />
+               </font>
+               <fill>
+                  <LinearGradient endX="1.0" endY="1.0">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.5260721445083618" green="0.6059494614601135" blue="0.8947368264198303" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </fill>
+            </Text>
+            <Button fx:id="postOrderButton" layoutX="566.0" layoutY="109.0" mnemonicParsing="false" onAction="#postOrderOnAction" prefHeight="37.0" prefWidth="165.0" style="-fx-background-radius: 15; -fx-background-color: #9b9b9b;" text="Post Order">
+               <font>
+                  <Font name="Arial" size="20.0" />
+               </font>
+            </Button>
             </children>
         </Pane>
     </children>
