@@ -90,49 +90,84 @@ public class BTree implements Tree {
 
     @Override
     public void remove(Object element) throws TreeException {
-        if (isEmpty()) {
-            throw new TreeException("Binary Tree is Empty");
-        }
-        if (!contains(element)) { // Primero verifica si el elemento existe
-            throw new TreeException("The element [" + element + "] does not exist");
-        }
-
-        this.root = remove(this.root, element);
-
+        if(isEmpty())
+            throw new TreeException("Binary Tree is empty");
+        root = remove(root,element, new boolean[]{false});
+        //root = remove(root, element);
     }
 
+    private BTreeNode remove(BTreeNode node, Object element, boolean[] deleted) throws TreeException{
+        if(node!=null){
+            if(util.Utility.compare(node.data, element)==0){
+                deleted[0] = true; // cambia a true porque lo va a eliminar
 
-
-    private BTreeNode remove(BTreeNode node, Object element) throws TreeException {
-        if (node == null) {
-            return null; // Elemento no encontrado o subárbol vacío
-        }
-
-        // Si encontramos el nodo a eliminar
-        if (node.data.equals(element)) {
-            // Caso 1: El nodo a suprimir no tiene hijos (es una hoja)
-            if (node.left == null && node.right == null) {
-                return null; // Simplemente lo eliminamos
+                //caso 1. es un nodo si hijos, es una hoja
+                if(node.left==null && node.right==null) return null;
+                    //caso 2-a. el nodo solo tien un hijo, el hijo izq
+                else if (node.left!=null&&node.right==null) {
+                    node.left = newPath(node.left, node.path);
+                    return node.left;
+                } //caso 2-b. el nodo solo tien un hijo, el hijo der
+                else if (node.left==null&&node.right!=null) {
+                    node.right = newPath(node.right, node.path);
+                    return node.right;
+                }
+                //caso 3. el nodo tiene dos hijos
+                else{
+                    //else if (node.left!=null&&node.right!=null) {
+                    /* *
+                     * El algoritmo de supresión dice que cuando el nodo a suprimir
+                     * tiene 2 hijos, entonces busque una hoja del subarbol derecho
+                     * y sustituya la data del nodo a suprimir por la data de esa hoja,
+                     * luego elimine esa hojo
+                     * */
+                    Object value = getLeaf(node.right);
+                    node.data = value;
+                    node.right = removeLeaf(node.right, value, new boolean[]{false});
+                }
             }
-            // Caso 2: El nodo a suprimir solo tiene un hijo
-            else if (node.left == null) {
-                return node.right; // Lo reemplazamos con su hijo derecho
-            } else if (node.right == null) {
-                return node.left; // Lo reemplazamos con su hijo izquierdo
-            }
-            // Caso 3: El nodo a suprimir tiene dos hijos
-            BTreeNode maxNodeInLeftSubtree = (BTreeNode) max();
-            node.data = maxNodeInLeftSubtree.data; // Reemplazamos el valor del nodo actual
-            node.path = maxNodeInLeftSubtree.path; // Opcional: también copiar la ruta si es relevante
-            // Ahora, eliminamos el nodo que hemos movido (el maxNodeInLeftSubtree) del subárbol izquierdo
-            node.left = remove(node.left, maxNodeInLeftSubtree.data);
-            return node;
+            if(!deleted[0]) node.left = remove(node.left, element, deleted); //llamado recursivo por la izq
+            if(!deleted[0]) node.right = remove(node.right, element, deleted); //llamado recursivo por la der
         }
+        return node; //retorna el nodo modificado o no
+    }
 
-        // Si no es el nodo, buscamos en los subárboles
-        node.left = remove(node.left, element);
-        node.right = remove(node.right, element);
+    /* *
+     * Funciona cuando se invoca al metodo remove
+     * Sirve para actualizar los labels del nodo removido y sus
+     * descendientes (cuando aplica)
+     * */
+    private BTreeNode newPath(BTreeNode node,String label){
+        if(node!=null){
+            node.path = label;
+            node.left = newPath(node.left,label+"/left");
+            node.right = newPath(node.right,label+"/right");
+        }
         return node;
+    }
+
+    private Object getLeaf(BTreeNode node){
+        Object aux;
+        if(node==null) return null;
+        else if(node.left==null&&node.right==null) return node.data; //es una hoja
+        else{
+            aux = getLeaf(node.left); //siga bajando por el subarbol izq
+            if(aux==null) aux = getLeaf(node.right);
+        }
+        return aux;
+    }
+
+    private BTreeNode removeLeaf(BTreeNode node, Object value, boolean[] deleted){
+        if(node==null) return null;
+            //si es una hoja y esa hoja es la que andamos buscando, la eliminamos
+        else if(node.left==null&&node.right==null&&util.Utility.compare(node.data, value)==0) {
+            deleted[0] = true; //el elemento fue eliminado
+            return null; //es una hoja y la elimina
+        }else{
+            node.left = removeLeaf(node.left, value, deleted);
+            if(!deleted[0]) node.right = removeLeaf(node.right, value, deleted);
+        }
+        return node; //retorna el subarbol derecho con la hoja eliminada
     }
 
     @Override

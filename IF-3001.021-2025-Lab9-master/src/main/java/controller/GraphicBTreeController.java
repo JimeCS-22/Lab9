@@ -31,7 +31,20 @@ public class GraphicBTreeController {
     private Button randomizeButton;
     @FXML
     private Pane treePane;
+    @FXML
+    private ScrollPane treeScrollPane;
+
     private BTree bTree;
+
+    // Constantes para los niveles
+    private static final double NODE_RADIUS = 20;
+    private static final double VERTICAL_SPACING = 80; // Espacio entre niveles
+    private static final double HORIZONTAL_INITIAL_SPACING = 300; // Espacio horizontal inicial para los hijos de la raíz
+    private static final double HORIZONTAL_REDUCTION_FACTOR = 0.6; // Cuánto se reduce el espacio horizontal por nivel
+    private static final double LEVEL_LINE_OFFSET_X = 50; // Desplazamiento X para las líneas de nivel
+    private static final double LEVEL_TEXT_OFFSET_X = 20; // Desplazamiento X para los números de nivel
+    private static final double START_Y = 50; // Posición Y inicial para el nodo raíz
+
 
     public void initialize() {
         // Crear árbol binario con valores aleatorios
@@ -50,15 +63,18 @@ public class GraphicBTreeController {
         treePane.getChildren().clear(); // Limpiar el panel antes de dibujar
 
         if (!bTree.isEmpty()) {
-            drawBTreeNode(bTree.getRoot(), 400, 50, 300);
+
+            drawBTreeNode(bTree.getRoot(), treePane.getPrefWidth() / 2, START_Y, HORIZONTAL_INITIAL_SPACING, 0);
+
         }
     }
 
-    private void drawBTreeNode(BTreeNode node, double x, double y, double hSpace) {
+    private void drawBTreeNode(BTreeNode node, double x, double y, double hSpace, int level) {
+
         if (node == null) return;
 
         // Dibujar el nodo
-        Circle circle = new Circle(x, y, 20, Color.LIGHTBLUE);
+        Circle circle = new Circle(x, y, NODE_RADIUS, Color.LIGHTBLUE);
         circle.setStroke(Color.BLACK);
 
         Text text = new Text(x - 10, y + 5, String.valueOf(node.data));
@@ -67,23 +83,45 @@ public class GraphicBTreeController {
         treePane.getChildren().addAll(circle, text);
 
         // Dibujar hijos recursivamente
-        double childY = y + 80;
-        double childHSpace = hSpace * 0.6; // Reducir espacio para niveles más profundos
+        double childY = y + VERTICAL_SPACING;
+        double childHSpace = hSpace * HORIZONTAL_REDUCTION_FACTOR;
 
         // Hijo izquierdo
         if (node.left != null) {
-            double leftX = x - hSpace/2;
-            Line line = new Line(x, y + 20, leftX, childY - 20);
+            double leftX = x - hSpace / 2;
+            Line line = new Line(x, y + NODE_RADIUS, leftX, childY - NODE_RADIUS);
             treePane.getChildren().add(line);
-            drawBTreeNode(node.left, leftX, childY, childHSpace);
+            drawBTreeNode(node.left, leftX, childY, childHSpace, level + 1);
         }
 
         // Hijo derecho
         if (node.right != null) {
-            double rightX = x + hSpace/2;
-            Line line = new Line(x, y + 20, rightX, childY - 20);
+            double rightX = x + hSpace / 2;
+            Line line = new Line(x, y + NODE_RADIUS, rightX, childY - NODE_RADIUS);
             treePane.getChildren().add(line);
-            drawBTreeNode(node.right, rightX, childY, childHSpace);
+            drawBTreeNode(node.right, rightX, childY, childHSpace, level + 1);
+        }
+
+    }
+
+    private void drawLevels() throws TreeException {
+        int treeHeight = bTree.height(); // Obtener la altura máxima del árbol
+        double paneWidth = treePane.getPrefWidth();
+
+        for (int i = 0; i <= treeHeight; i++) {
+            double y = START_Y + (i * VERTICAL_SPACING); // Calcular la posición Y para cada nivel
+
+            // Dibujar línea horizontal
+            Line levelLine = new Line(LEVEL_LINE_OFFSET_X, y, paneWidth - LEVEL_LINE_OFFSET_X, y);
+            levelLine.setStroke(Color.LIGHTGREEN); // Color verde para las líneas de nivel
+            levelLine.setStrokeWidth(2); // Línea más gruesa
+            treePane.getChildren().add(levelLine);
+
+            // Dibujar número de nivel
+            Text levelText = new Text(LEVEL_TEXT_OFFSET_X, y + 5, String.valueOf(i));
+            levelText.setFont(new Font(16));
+            levelText.setFill(Color.BLACK); // Color negro para el texto del nivel
+            treePane.getChildren().add(levelText);
         }
     }
 
@@ -99,6 +137,19 @@ public class GraphicBTreeController {
 
     @javafx.fxml.FXML
     public void levelsOnAction(ActionEvent actionEvent) {
+
+        treePane.getChildren().clear(); // Limpiar el panel
+
+        if (!bTree.isEmpty()) {
+            try {
+                drawLevels(); // Dibuja las líneas de nivel
+
+                drawBTreeNode(bTree.getRoot(), treePane.getPrefWidth() / 2, START_Y, HORIZONTAL_INITIAL_SPACING, 0);
+            } catch (TreeException e) {
+                txtMessage.setText("Error displaying levels: " + e.getMessage());
+            }
+        }
+        util.FXUtility.showMessage("INFORMACIÓN", "The levels have been shown");
 
 
     }
@@ -136,7 +187,7 @@ public class GraphicBTreeController {
             tourInfoContent = "Error: " + e.getMessage();
         }
 
-        util.FXUtility.showTextAreaAlert("Recorridos del Árbol", "Resultados de los Recorridos", tourInfoContent);
+        util.FXUtility.showTextAreaAlert("Tour Info", "Result tours", tourInfoContent);
 
     }
 
