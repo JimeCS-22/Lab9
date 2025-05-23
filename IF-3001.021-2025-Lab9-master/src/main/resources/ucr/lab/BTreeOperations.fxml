@@ -15,7 +15,7 @@
             <children>
                 <Pane prefHeight="83.0" prefWidth="790.0" style="-fx-background-color: #536dde;">
                     <children>
-                        <Text fx:id="txtMessage" layoutX="48.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Graphic Binary Tree - Operations" textAlignment="CENTER" wrappingWidth="642.94921875">
+                        <Text layoutX="48.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Graphic Binary Tree - Operations" textAlignment="CENTER" wrappingWidth="642.94921875">
                             <font>
                                 <Font name="Serif Regular" size="47.0" />
                             </font>
@@ -38,37 +38,37 @@
                         </Text>
                     </children>
                 </Pane>
-                <Button fx:id="randomizeButton" layoutX="14.0" layoutY="90.0" mnemonicParsing="false" onAction="#randomizeOnAction" prefHeight="37.0" prefWidth="110.0" style="-fx-background-radius: 15; -fx-background-color: #9b9b9b;" text="Randomize">
+                <Button layoutX="14.0" layoutY="90.0" mnemonicParsing="false" onAction="#randomizeOnAction" prefHeight="37.0" prefWidth="110.0" style="-fx-background-radius: 15; -fx-background-color: #9b9b9b;" text="Randomize">
                     <font>
                         <Font name="Arial" size="14.0" />
                     </font>
                 </Button>
-            <Button fx:id="containsButton" layoutX="133.0" layoutY="90.0" mnemonicParsing="false" onAction="#containsOnAction" prefHeight="37.0" prefWidth="110.0" style="-fx-background-radius: 15; -fx-background-color: #9b9b9b;" text="Contains">
+            <Button layoutX="133.0" layoutY="90.0" mnemonicParsing="false" onAction="#containsOnAction" prefHeight="37.0" prefWidth="110.0" style="-fx-background-radius: 15; -fx-background-color: #9b9b9b;" text="Contains">
                <font>
                   <Font name="Arial" size="14.0" />
                </font>
             </Button>
-            <Button fx:id="addButton" layoutX="251.0" layoutY="90.0" mnemonicParsing="false" onAction="#addOnAction" prefHeight="37.0" prefWidth="110.0" style="-fx-background-radius: 15; -fx-background-color: #9b9b9b;" text="Add">
+            <Button layoutX="251.0" layoutY="90.0" mnemonicParsing="false" onAction="#addOnAction" prefHeight="37.0" prefWidth="110.0" style="-fx-background-radius: 15; -fx-background-color: #9b9b9b;" text="Add">
                <font>
                   <Font name="Arial" size="14.0" />
                </font>
             </Button>
-            <Button fx:id="removeButton" layoutX="369.0" layoutY="90.0" mnemonicParsing="false" onAction="#removeOnAction" prefHeight="37.0" prefWidth="110.0" style="-fx-background-radius: 15; -fx-background-color: #9b9b9b;" text="Remove">
+            <Button layoutX="369.0" layoutY="90.0" mnemonicParsing="false" onAction="#removeOnAction" prefHeight="37.0" prefWidth="110.0" style="-fx-background-radius: 15; -fx-background-color: #9b9b9b;" text="Remove">
                <font>
                   <Font name="Arial" size="14.0" />
                </font>
             </Button>
-            <Button fx:id="nodeHeightButton" layoutX="488.0" layoutY="90.0" mnemonicParsing="false" onAction="#nodeHeightOnAction" prefHeight="37.0" prefWidth="117.0" style="-fx-background-radius: 15; -fx-background-color: #9b9b9b;" text="Node Height">
+            <Button layoutX="488.0" layoutY="90.0" mnemonicParsing="false" onAction="#nodeHeightOnAction" prefHeight="37.0" prefWidth="117.0" style="-fx-background-radius: 15; -fx-background-color: #9b9b9b;" text="Node Height">
                <font>
                   <Font name="Arial" size="14.0" />
                </font>
             </Button>
-            <Button fx:id="treeHeightButton" layoutX="613.0" layoutY="90.0" mnemonicParsing="false" onAction="#treeHeightOnAction" prefHeight="37.0" prefWidth="110.0" style="-fx-background-radius: 15; -fx-background-color: #9b9b9b;" text="Tree Height">
+            <Button layoutX="613.0" layoutY="90.0" mnemonicParsing="false" onAction="#treeHeightOnAction" prefHeight="37.0" prefWidth="110.0" style="-fx-background-radius: 15; -fx-background-color: #9b9b9b;" text="Tree Height">
                <font>
                   <Font name="Arial" size="14.0" />
                </font>
             </Button>
-                  <Pane layoutY="139.0" prefHeight="582.0" prefWidth="790.0" style="-fx-background-color: #4053A9;" />
+                  <Pane fx:id="pane2"  onScroll="#handleScrollZoom" layoutY="139.0" prefHeight="582.0" prefWidth="790.0" style="-fx-background-color: #4053A9;" />
             </children>
         </Pane>
     </children>
