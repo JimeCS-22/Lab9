@@ -7,57 +7,55 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
-import util.FXUtility;
+import ucr.lab.HelloApplication;
 
-import java.awt.event.MouseEvent;
 import java.io.IOException;
-
-import static java.lang.System.load;
 
 public class HelloController {
 
         @FXML
-        private AnchorPane ap;
-
+        private Text txtMessage;
         @FXML
         private BorderPane bp;
-
         @FXML
-        private Text txtMessage;
+        private AnchorPane ap;
 
-        @FXML
-        void BTreeOperationsOnAction(ActionEvent event) {
 
-            load("BTreeOperations.fxml");
-
+        @Deprecated
+        private void load(String form) throws IOException {
+                FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource(form));
+                this.bp.setCenter(fxmlLoader.load());
         }
 
         @FXML
-        void BTreeTourOnAction(ActionEvent event) {
+        public void Home(ActionEvent actionEvent) {
+                this.bp.setCenter(ap);
+                this.txtMessage.setText("Laboratory No. 9");
+        }
 
-            load("BTreeTour.fxml");
 
+        @FXML
+        public void Exit(ActionEvent actionEvent) {
+                System.exit(0);
         }
 
         @FXML
-        void Exit(ActionEvent event) {
-
+        public void exampleOnMousePressed(Event event)  {
+                this.txtMessage.setText("Loading Example. Please wait!!!");
         }
 
         @FXML
-        void GraphicBTreeOnAction(ActionEvent event) {
-
-            load("GraphicBTree.fxml");
-
+        public void GraphicBTreeOnAction(ActionEvent actionEvent) throws IOException {
+                load("GraphicBTree.fxml");
         }
 
         @FXML
-        void Home(ActionEvent event) {
-
+        public void BTreeTourOnAction(ActionEvent actionEvent) throws IOException {
+                load("BTreeTour.fxml");
         }
 
         @FXML
-        public void exampleOnMousePressed(javafx.scene.input.MouseEvent mouseEvent) {
-         }
-
+        public void BTreeOperationsOnAction(ActionEvent actionEvent) throws IOException {
+                load("BTreeOperations.fxml");
+        }
 }

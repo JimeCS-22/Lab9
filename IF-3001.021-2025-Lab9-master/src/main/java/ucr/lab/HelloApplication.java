@@ -17,7 +17,7 @@ public void start(Stage stage) throws IOException {
     Scene scene = new Scene(fxmlLoader.load());
     String css = Objects.requireNonNull(HelloApplication.class.getResource("/ucr/lab/stylesheet.css")).toExternalForm();
     scene.getStylesheets().add(css);
-    stage.setTitle("Laboratory 8");
+    stage.setTitle("Laboratory 9");
     stage.setScene(scene);
     stage.setResizable(false);
     stage.show();
