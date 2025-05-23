@@ -9,90 +9,55 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import util.FXUtility;
 
+import java.awt.event.MouseEvent;
 import java.io.IOException;
+
+import static java.lang.System.load;
 
 public class HelloController {
 
-    @FXML
-    private Text txtMessage;
-    @FXML
-    private BorderPane bp;
-    @FXML
-    private AnchorPane ap;
+        @FXML
+        private AnchorPane ap;
 
-    private void load(String formName) {
-        try {
-            // Construye la ruta correcta al archivo FXML
-            String fxmlPath = "/ucr/lab8/" + formName;
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlPath));
+        @FXML
+        private BorderPane bp;
 
-            if (fxmlLoader.getLocation() == null) {
-                throw new IOException("No se pudo encontrar el archivo: " + fxmlPath);
-            }
+        @FXML
+        private Text txtMessage;
 
-            this.bp.setCenter(fxmlLoader.load());
-            txtMessage.setText("Cargado: " + formName);
+        @FXML
+        void BTreeOperationsOnAction(ActionEvent event) {
 
-        } catch (IOException e) {
-            FXUtility.showErrorAlert("Error", "No se pudo cargar la vista: " + formName + "\n" + e.getMessage());
-            e.printStackTrace();
+            load("BTreeOperations.fxml");
+
         }
-    }
 
-    @FXML
-    public void Home(ActionEvent actionEvent) {
-        this.txtMessage.setText("Laboratory 8");
-        this.bp.setCenter(ap);
-    }
+        @FXML
+        void BTreeTourOnAction(ActionEvent event) {
 
-    @FXML
-    public void Exit(ActionEvent actionEvent) {
-        System.exit(0);
-    }
+            load("BTreeTour.fxml");
 
-    @FXML
-    public void exampleOnMousePressed(Event event) {
-        this.txtMessage.setText("Loading Example. Please wait!!!");
-    }
+        }
 
-    // Métodos para cargar los diferentes algoritmos de ordenamiento
-    @FXML
-    public void BubbleSortOnAction(ActionEvent actionEvent) {
-        load("elementary/BubbleSort.fxml");
-    }
+        @FXML
+        void Exit(ActionEvent event) {
 
-    @FXML
-    public void mergeSortOnAction(ActionEvent actionEvent) {
-        load("complex/MergeSort.fxml");
-    }
+        }
 
-    @FXML
-    public void shellSortOnAction(ActionEvent actionEvent) {
-        load("complex/ShellSort.fxml");
-    }
+        @FXML
+        void GraphicBTreeOnAction(ActionEvent event) {
 
-    @FXML
-    public void quickSortOnAction(ActionEvent actionEvent) {
-        load("complex/QuickSorting.fxml");
-    }
+            load("GraphicBTree.fxml");
 
-    @FXML
-    public void countingSortOnAction(ActionEvent actionEvent) {
-        load("elementary/CountingSorting.fxml");
-    }
+        }
 
-    @FXML
-    public void impBubbleSortOnAction(ActionEvent actionEvent) {
-        load("elementary/ImpBubbleSort.fxml");
-    }
+        @FXML
+        void Home(ActionEvent event) {
 
-    @FXML
-    public void selectionSortOnAction(ActionEvent actionEvent) {
-        load("elementary/SelectionSorting.fxml");
-    }
+        }
 
-    @FXML
-    public void radixSortOnAction(ActionEvent actionEvent) {
-        load("complex/RadixSorting.fxml");
-    }
+        @FXML
+        public void exampleOnMousePressed(javafx.scene.input.MouseEvent mouseEvent) {
+         }
+
 }

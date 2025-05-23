@@ -5,13 +5,13 @@ public class BTree implements Tree {
 
     @Override
     public int size() throws TreeException {
-        if (isEmpty())
+        if(isEmpty())
             throw new TreeException("Binary Tree is empty");
         return size(root);
     }
 
-    private int size(BTreeNode node) {
-        if (node == null) return 0;
+    private int size(BTreeNode node){
+        if(node==null) return 0;
         else return 1 + size(node.left) + size(node.right);
     }
 
@@ -24,7 +24,7 @@ public class BTree implements Tree {
     @Override
     public boolean isEmpty() {
 
-        return root == null;
+        return root==null;
     }
 
     @Override
@@ -40,42 +40,43 @@ public class BTree implements Tree {
     private boolean binarySearch(BTreeNode node, Object element) {
         if (node == null) {
             return false; // El elemento no se encontro
-        } else
-            // Compara el elemento actual
-            if (util.Utility.compare(node.data, element) == 0) {
-                return true; // El elemento se encontró
-            } else
-                // Busca en el subárbol derecho
-                return binarySearch(node.left, element) || binarySearch(node.right, element);
+        }
+
+        // Compara el elemento actual
+        if (util.Utility.compare(node.data , element) == 0) {
+            return true; // El elemento se encontró
+        }
+        return binarySearch(node.left, element) || binarySearch(node.right, element);
+
     }
 
 
     @Override
     public void add(Object element) {
-        //this.root = add(root, element);
+       //this.root = add(root, element);
         this.root = add(root, element, "root");
     }
 
-    private BTreeNode add(BTreeNode node, Object element) {
-        if (node == null)
+    private BTreeNode add(BTreeNode node, Object element){
+        if(node==null)
             node = new BTreeNode(element);
-        else {
+        else{
             int value = util.Utility.random(100);
-            if (value % 2 == 0)
+            if(value%2==0)
                 node.left = add(node.left, element);
             else node.right = add(node.right, element);
         }
         return node;
     }
 
-    private BTreeNode add(BTreeNode node, Object element, String path) {
-        if (node == null)
+    private BTreeNode add(BTreeNode node, Object element, String path){
+        if(node==null)
             node = new BTreeNode(element, path);
-        else {
+        else{
             int value = util.Utility.random(100);
-            if (value % 2 == 0)
-                node.left = add(node.left, element, path + "/left");
-            else node.right = add(node.right, element, path + "/right");
+            if(value%2==0)
+                node.left = add(node.left, element, path+"/left");
+            else node.right = add(node.right, element, path+"/right");
         }
         return node;
     }
@@ -92,6 +93,7 @@ public class BTree implements Tree {
         this.root = remove(this.root, element);
 
     }
+
 
 
     private BTreeNode remove(BTreeNode node, Object element) throws TreeException {
@@ -209,7 +211,7 @@ public class BTree implements Tree {
         return min(root);
     }
 
-    private Object min(BTreeNode node) {
+    private Object min(BTreeNode node){
         if (node == null) {
             return null; // No hay elementos en este subárbol
         }
@@ -259,84 +261,82 @@ public class BTree implements Tree {
 
     @Override
     public String preOrder() throws TreeException {
-        if (isEmpty())
+        if(isEmpty())
             throw new TreeException("Binary Tree is empty");
         return preOrder(root);
     }
 
     //recorre el árbol de la forma: nodo-hijo izq-hijo der
-    private String preOrder(BTreeNode node) {
-        String result = "";
-        if (node != null) {
+    private String preOrder(BTreeNode node){
+        String result="";
+        if(node!=null){
             //result = node.data+" ";
-            result = node.data + "(" + node.path + ")" + " ";
+            result  = node.data+"("+node.path+")"+" ";
             result += preOrder(node.left);
             result += preOrder(node.right);
         }
-        return result;
+        return  result;
     }
 
     @Override
     public String inOrder() throws TreeException {
-        if (isEmpty())
+        if(isEmpty())
             throw new TreeException("Binary Tree is empty");
         return inOrder(root);
     }
 
     //recorre el árbol de la forma: hijo izq-nodo-hijo der
-    private String inOrder(BTreeNode node) {
-        String result = "";
-        if (node != null) {
-            result = inOrder(node.left);
-            result += node.data + " ";
+    private String inOrder(BTreeNode node){
+        String result="";
+        if(node!=null){
+            result  = inOrder(node.left);
+            result += node.data+" ";
             result += inOrder(node.right);
         }
-        return result;
+        return  result;
     }
 
     //para mostrar todos los elementos existentes
     @Override
     public String postOrder() throws TreeException {
-        if (isEmpty())
+        if(isEmpty())
             throw new TreeException("Binary Tree is empty");
         return postOrder(root);
     }
 
     //recorre el árbol de la forma: hijo izq-hijo der-nodo,
-    private String postOrder(BTreeNode node) {
-        String result = "";
-        if (node != null) {
-            result = postOrder(node.left);
+    private String postOrder(BTreeNode node){
+        String result="";
+        if(node!=null){
+            result  = postOrder(node.left);
             result += postOrder(node.right);
-            result += node.data + " ";
+            result += node.data+" ";
         }
         return result;
     }
 
     @Override
     public String toString() {
-        String result = "Binary Tree Content:";
+        String result= "Binary Tree Content:";
         try {
-            result = "PreOrder: " + preOrder();
-            result += "\nInOrder: " + inOrder();
-            result += "\nPostOrder: " + postOrder();
+            result = "PreOrder: "+preOrder();
+            result+= "\nInOrder: "+inOrder();
+            result+= "\nPostOrder: "+postOrder();
 
         } catch (TreeException e) {
             throw new RuntimeException(e);
         }
         return result;
     }
-
     public String printLeaves() throws TreeException {
-        if (isEmpty())
+        if(isEmpty())
             throw new TreeException("Binary Tree is empty");
         return printLeaves(root);
     }
-
-    private String printLeaves(BTreeNode node) {
-        if (node == null) return "";
-        else {
-            if (node.left == null && node.right == null) // Es una hoja
+    private String printLeaves(BTreeNode node){
+        if(node==null) return "";
+        else{
+            if(node.left==null && node.right==null) // Es una hoja
                 return node.data.toString() + " ";
             else
                 return printLeaves(node.left) + printLeaves(node.right);
@@ -344,11 +344,10 @@ public class BTree implements Tree {
     }
 
     public String printNodes1Child() throws TreeException {
-        if (isEmpty())
+        if(isEmpty())
             throw new TreeException("Binary Tree is empty");
         return printNodes1Child(root);
     }
-
     private String printNodes1Child(BTreeNode node) {
         if (node == null)
             return "";
@@ -362,23 +361,98 @@ public class BTree implements Tree {
     }
 
     public String printNodes2Children() throws TreeException {
-        if (isEmpty())
+        if(isEmpty())
             throw new TreeException("Binary Tree is empty");
         return printNodes2Children(root);
     }
-
     private String printNodes2Children(BTreeNode node) {
         if (node == null)
             return "";
         else {
             String result = "";
-            if (node.left != null && node.right != null) {
-                {
+            if (node.left != null && node.right != null) {{
 
-                }
+            }
                 result += node.data.toString() + " ";
             }
             return result + printNodes2Children(node.left) + printNodes2Children(node.right);
         }
     }
+
+    public String printNodesWithChildren() throws TreeException {
+        if (isEmpty())
+            throw new TreeException("Binary Tree is Empty");
+
+        return printNodesWithChildren(root);
+    }
+
+    private String printNodesWithChildren(BTreeNode node){
+
+        if (node == null) return "";
+
+        String result = "";
+
+        if (node.left != null || node.right == null){
+
+            result += "Node " + node.data + " children " ;
+
+            if (node.left != null) {
+                result += node.left.data + "" ;
+            }
+
+            if (node.right != null){
+
+                result += node.right.data + "";
+
+            }
+
+            result += "\n";
+        }
+
+        result += printNodesWithChildren(node.left);
+        result += printNodesWithChildren(node.right);
+
+        return result;
+
+    }
+
+    public String printSubTree() throws TreeException{
+
+        if (isEmpty())
+            throw new TreeException("Binary Tree is Empty");
+
+        return printSubTree(root);
+    }
+
+    private String printSubTree(BTreeNode node){
+
+
+        return printSubTree(node.left);
+    }
+
+    public int totalLeaves() throws TreeException{
+
+        if (isEmpty())
+            throw new TreeException("Binary Tree is Empty");
+
+        return totalLeaves(root);
+    }
+
+    private int totalLeaves(BTreeNode node){
+            if (node == null) {
+                return 0;  // Si el nodo es nulo, no hay hojas en este subárbol
+            }
+
+            // Si el nodo no tiene hijos (es una hoja)
+            if (node.left == null && node.right == null) {
+                return 1;  // Contamos esta hoja
+            }
+
+            // Recursión en los subárboles izquierdo y derecho
+            return  totalLeaves(node.left) + totalLeaves(node.right);
+
+    }
+
+
+
 }
