@@ -87,4 +87,26 @@ public class FXUtility {
         alert.showAndWait();
         return null;
     }
+
+    public static void showTextAreaAlert(String title, String headerText, String contentText) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(headerText);
+
+        TextArea textArea = new TextArea(contentText);
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+        textArea.setMaxWidth(Double.MAX_VALUE);
+        textArea.setMaxHeight(Double.MAX_VALUE);
+
+        textArea.setStyle("-fx-font-weight: bold;");
+
+        // Añadir el TextArea al DialogPane del Alert
+        alert.getDialogPane().setContent(textArea);
+
+        alert.getDialogPane().setPrefWidth(500);
+        alert.getDialogPane().setPrefHeight(300);
+
+        alert.showAndWait();
+    }
 }

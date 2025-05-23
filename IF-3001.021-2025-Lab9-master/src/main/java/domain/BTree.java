@@ -1,7 +1,14 @@
 package domain;
 
 public class BTree implements Tree {
-    private BTreeNode root; //se refiere a la raiz del arbol
+    private BTreeNode root;//se refiere a la raiz del arbol
+
+    public BTreeNode getRoot() {
+        return root;
+    }
+    public void setRoot(BTreeNode root) {
+        this.root = root;
+    }
 
     @Override
     public int size() throws TreeException {

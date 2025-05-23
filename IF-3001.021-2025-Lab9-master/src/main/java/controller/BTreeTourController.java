@@ -18,8 +18,6 @@ import javafx.scene.text.Font;
 import javafx.scene.shape.Circle;
 import util.Utility;
 
-
-
 public class BTreeTourController {
     @javafx.fxml.FXML
     private Text txtMessage;
@@ -60,9 +58,9 @@ public class BTreeTourController {
         private void drawTree() {
             treePane.getChildren().clear(); // Limpiar el panel antes de dibujar
 
-//            if (!bTree.isEmpty()) {
-//                drawBTreeNode(bTree.getRoot(), 400, 50, 300);
-//            }
+           if (!bTree.isEmpty()) {
+                drawBTreeNode(bTree.getRoot(), 400, 50, 300);
+           }
         }
 
         private void drawBTreeNode(BTreeNode node, double x, double y, double hSpace) {

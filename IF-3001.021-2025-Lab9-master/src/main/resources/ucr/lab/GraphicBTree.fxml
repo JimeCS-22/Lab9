@@ -53,9 +53,8 @@
                         <Font name="Arial" size="20.0" />
                     </font>
                 </Button>
-                <Pane layoutY="136.0" prefHeight="583.0" prefWidth="790.0" style="-fx-background-color: #4053A9;" />
+                <Pane fx:id="treePane" onScroll="#handleScrollZoom" layoutY="136.0" prefHeight="583.0" prefWidth="790.0" style="-fx-background-color: #4053A9;" />
             </children>
         </Pane>
     </children>
 </AnchorPane>
-
