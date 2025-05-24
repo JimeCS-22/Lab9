@@ -2,45 +2,26 @@ package controller;
 
 import domain.BTree;
 import domain.BTreeNode;
-import domain.TreeException;
-import javafx.animation.FillTransition;
-import javafx.animation.SequentialTransition;
+
 import javafx.event.ActionEvent;
-import javafx.scene.control.*;
+
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.scene.text.Font;
 import javafx.scene.shape.Circle;
-import javafx.util.Duration;
+
 import util.Utility;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 
 public class BTreeTourController {
-    @javafx.fxml.FXML
-    private Text txtMessage;
-    @javafx.fxml.FXML
-    private Pane mainPain;
-    @javafx.fxml.FXML
-    private Pane buttonPane;
-    @javafx.fxml.FXML
-    private Button autoButton1;
-    @javafx.fxml.FXML
-    private AnchorPane AP;
-    @javafx.fxml.FXML
-    private Button inOrderButton;
-    @javafx.fxml.FXML
-    private Button preOrderButton;
-    @javafx.fxml.FXML
-    private Button postOrderButton;
+
     @javafx.fxml.FXML
     private Text ordertxtMessage;
     @javafx.fxml.FXML
@@ -127,7 +108,6 @@ public class BTreeTourController {
         // Limpiar todas las posiciones anteriores
         positionLabels.values().forEach(text -> text.setText(""));
 
-        String traversalResult;
         String orderType;
 
         switch (traversalType) {
