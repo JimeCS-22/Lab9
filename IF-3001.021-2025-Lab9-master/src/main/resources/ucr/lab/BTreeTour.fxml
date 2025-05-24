@@ -14,10 +14,10 @@
         <Pane fx:id="mainPain" prefHeight="719.0" prefWidth="790.0">
             <children>
                 <Pane prefHeight="83.0" prefWidth="790.0" style="-fx-background-color: #536dde;">
-                    <children>
-                        <Text fx:id="txtMessage" layoutX="161.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Graphic Binary Tree" textAlignment="CENTER" wrappingWidth="468.94921875">
+               <children>
+                        <Text fx:id="txtMessage" layoutX="-20.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Graphic Binary Tree - Transversal Tour" textAlignment="CENTER" wrappingWidth="769.0">
                             <font>
-                                <Font name="Serif Regular" size="47.0" />
+                                <Font name="Serif Regular" size="40.0" />
                             </font>
                             <fill>
                                 <LinearGradient endX="1.0" endY="1.0">
@@ -36,7 +36,7 @@
                                 </LinearGradient>
                             </fill>
                         </Text>
-                    </children>
+               </children>
                 </Pane>
                 <Pane fx:id="buttonPane" layoutX="11.0" layoutY="647.0" prefHeight="72.0" prefWidth="769.0" />
                 <Button fx:id="autoButton1" layoutX="14.0" layoutY="109.0" mnemonicParsing="false" onAction="#randomizeOnAction" prefHeight="37.0" prefWidth="165.0" style="-fx-background-radius: 15; -fx-background-color: #9b9b9b;" text="Randomize">

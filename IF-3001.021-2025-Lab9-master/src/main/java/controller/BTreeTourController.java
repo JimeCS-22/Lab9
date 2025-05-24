@@ -3,12 +3,11 @@ package controller;
 import domain.BTree;
 import domain.BTreeNode;
 import domain.TreeException;
-import javafx.application.Platform;
+import javafx.animation.FillTransition;
+import javafx.animation.SequentialTransition;
 import javafx.event.ActionEvent;
-import javafx.geometry.Bounds;
 import javafx.scene.control.*;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -16,7 +15,14 @@ import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.scene.text.Font;
 import javafx.scene.shape.Circle;
+import javafx.util.Duration;
 import util.Utility;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class BTreeTourController {
     @javafx.fxml.FXML
@@ -40,6 +46,8 @@ public class BTreeTourController {
     @javafx.fxml.FXML
     private Pane treePane; // Panel donde se dibujará el árbol
     private BTree bTree;
+    private Map<BTreeNode, Text> positionLabels = new HashMap<>();
+    private Map<BTreeNode, Circle> nodeCircles = new HashMap<>();
 
 
     public void initialize() {
@@ -52,59 +60,130 @@ public class BTreeTourController {
 
             drawTree();
 
-
         }
 
-        private void drawTree() {
-            treePane.getChildren().clear(); // Limpiar el panel antes de dibujar
+    private void drawBTreeNode(BTreeNode node, double x, double y, double levelWidth) {
+        if (node == null) return;
 
-           if (!bTree.isEmpty()) {
-                drawBTreeNode(bTree.getRoot(), 400, 50, 300);
-           }
-        }
+        // Dibujar el nodo
+        Circle circle = new Circle(x, y, 20, Color.LIGHTBLUE);
+        circle.setStroke(Color.BLACK);
 
-        private void drawBTreeNode(BTreeNode node, double x, double y, double hSpace) {
-            if (node == null) return;
+        // Texto para la posición en el recorrido (inicialmente vacío y en rojo)
+        Text positionText = new Text(x + 20, y - 5, "");
+        positionText.setFill(Color.RED);
+        positionText.setFont(new Font(10));
 
-            // Dibujar el nodo
-            Circle circle = new Circle(x, y, 20, Color.LIGHTBLUE);
-            circle.setStroke(Color.BLACK);
+        treePane.getChildren().add(positionText);
 
-            Text text = new Text(x - 10, y + 5, String.valueOf(node.data));
-            text.setFont(new Font(12));
+        // Guardar referencias
+        nodeCircles.put(node, circle);
+        positionLabels.put(node, positionText);
 
-            treePane.getChildren().addAll(circle, text);
+        Text text = new Text(x - 10, y + 5, String.valueOf(node.data));
+        text.setFont(new Font(12));
 
-            // Dibujar hijos recursivamente
-            double childY = y + 80;
-            double childHSpace = hSpace * 0.6; // Reducir espacio para niveles más profundos
+        treePane.getChildren().addAll(circle, text);
 
-            // Hijo izquierdo
-            if (node.left != null) {
-                double leftX = x - hSpace/2;
-                Line line = new Line(x, y + 20, leftX, childY - 20);
+        // Calcular espacio para hijos
+        double childY = y + 90;
+
+        // Determinar si tenemos uno o dos hijos
+        boolean hasLeft = node.left != null;
+        boolean hasRight = node.right != null;
+
+        if (hasLeft || hasRight) {
+            if (hasLeft && hasRight) {
+                // Caso con dos hijos: dividir espacio equitativamente
+                double leftX = x - levelWidth/4;
+                double rightX = x + levelWidth/4;
+
+                // Dibujar hijo izquierdo
+                Line leftLine = new Line(x, y + 23, leftX, childY - 23);
+                treePane.getChildren().add(leftLine);
+                drawBTreeNode(node.left, leftX, childY, levelWidth/2);
+
+                // Dibujar hijo derecho
+                Line rightLine = new Line(x, y + 23, rightX, childY - 23);
+                treePane.getChildren().add(rightLine);
+                drawBTreeNode(node.right, rightX, childY, levelWidth/2);
+            } else {
+                // Caso con un solo hijo: colocarlo directamente abajo pero desplazado
+                double childX = x;
+                if (hasLeft) {
+                    childX = x - levelWidth/4; // Desplazar a la izquierda
+                } else {
+                    childX = x + levelWidth/4; // Desplazar a la derecha
+                }
+
+                Line line = new Line(x, y + 23, childX, childY - 23);
                 treePane.getChildren().add(line);
-                drawBTreeNode(node.left, leftX, childY, childHSpace);
+                drawBTreeNode(hasLeft ? node.left : node.right, childX, childY, levelWidth/2);
             }
+        }
+    }
 
-            // Hijo derecho
-            if (node.right != null) {
-                double rightX = x + hSpace/2;
-                Line line = new Line(x, y + 20, rightX, childY - 20);
-                treePane.getChildren().add(line);
-                drawBTreeNode(node.right, rightX, childY, childHSpace);
+    private void updatePositions(String traversalType) {
+        // Limpiar todas las posiciones anteriores
+        positionLabels.values().forEach(text -> text.setText(""));
+
+        String traversalResult;
+        String orderType;
+
+        switch (traversalType) {
+            case "preOrder":
+                orderType = "Pre Order Transversal Tour (N-L-R)";
+                break;
+            case "inOrder":
+                orderType = "In Order Transversal Tour (L-N-R)";
+                break;
+            case "postOrder":
+                orderType = "Post Order Transversal Tour (L-R-N)";
+                break;
+            default:
+                return;
+        }
+
+        ordertxtMessage.setText(orderType);
+
+        List<BTreeNode> traversalNodes = getTraversalNodes(traversalType, bTree.getRoot());
+
+        for (int i = 0; i < traversalNodes.size(); i++) {
+            BTreeNode node = traversalNodes.get(i);
+            int position = i + 1;
+            if (positionLabels.containsKey(node)) {
+                positionLabels.get(node).setText(String.valueOf(position));
             }
         }
 
-        // Método para regenerar el árbol con nuevos valores aleatorios
-        @javafx.fxml.FXML
-        private void regenerateTree() {
-            bTree.clear();
-            for (int i = 0; i < 20; i++) {
-                bTree.add(Utility.random(50));
-            }
-            drawTree();
+
+    }
+
+
+
+    @javafx.fxml.FXML
+    public void preOrderOnAction(ActionEvent actionEvent) {
+        updatePositions("preOrder");
+    }
+
+    @javafx.fxml.FXML
+    public void inOrderOnAction(ActionEvent actionEvent) {
+        updatePositions("inOrder");
+    }
+
+    @javafx.fxml.FXML
+    public void postOrderOnAction(ActionEvent actionEvent) {
+        updatePositions("postOrder");
+    }
+
+    private void drawTree() {
+        treePane.getChildren().clear();
+        positionLabels.clear();
+        nodeCircles.clear();
+        if (!bTree.isEmpty()) {
+            drawBTreeNode(bTree.getRoot(), 400, 50, 600);
         }
+    }
 
     @javafx.fxml.FXML
     public void randomizeOnAction(ActionEvent actionEvent) {
@@ -123,44 +202,47 @@ public class BTreeTourController {
         util.FXUtility.showMessage("INFORMATION","Tree regenerated with " + nodeCount + " nodes");
     }
 
-    @javafx.fxml.FXML
-    public void postOrderOnAction(ActionEvent actionEvent) {
-        String result;
-        try {
-            result = bTree.postOrder();  // Obtener el recorrido post orden
-            ordertxtMessage.setText("Post Order Transversal Tour (L-R-N)");  // Actualizar el texto
-            txtMessage.setFill(Color.RED);  // Cambiar texto a rojo
-            txtMessage.setText(result);  // Mostrar el resultado del recorrido
-        } catch (TreeException e) {
-            txtMessage.setText("Error: " + e.getMessage());
+    private List<BTreeNode> getTraversalNodes(String traversalType, BTreeNode root) {
+        List<BTreeNode> result = new ArrayList<>();
+        switch (traversalType) {
+            case "preOrder":
+                preOrder(root, result);
+                break;
+            case "inOrder":
+                inOrder(root, result);
+                break;
+            case "postOrder":
+                postOrder(root, result);
+                break;
+        }
+        return result;
+    }
+
+    private void preOrder(BTreeNode node, List<BTreeNode> list) {
+        if (node != null) {
+            list.add(node);
+            preOrder(node.left, list);
+            preOrder(node.right, list);
         }
     }
 
-    @javafx.fxml.FXML
-    public void inOrderOnAction(ActionEvent actionEvent) {
-        String result;
-        try {
-            result = bTree.inOrder();  // Obtener el recorrido en orden
-            ordertxtMessage.setText("In Order Transversal Tour (L-N-R)");  // Actualizar el texto
-            txtMessage.setFill(Color.RED);  // Cambiar texto a rojo
-            txtMessage.setText(result);  // Mostrar el resultado del recorrido
-        } catch (TreeException e) {
-            txtMessage.setText("Error: " + e.getMessage());
+    private void inOrder(BTreeNode node, List<BTreeNode> list) {
+        if (node != null) {
+            inOrder(node.left, list);
+            list.add(node);
+            inOrder(node.right, list);
         }
     }
 
-    @javafx.fxml.FXML
-    public void preOrderOnAction(ActionEvent actionEvent) {
-        String result;
-        try {
-            result = bTree.preOrder();  // Obtener el recorrido pre orden
-            ordertxtMessage.setText("Pre Order Transversal Tour (N-L-R)");  // Actualizar el texto
-            txtMessage.setFill(Color.RED);  // Cambiar texto a rojo
-            txtMessage.setText(result);  // Mostrar el resultado del recorrido
-        } catch (TreeException e) {
-            txtMessage.setText("Error: " + e.getMessage());
+    private void postOrder(BTreeNode node, List<BTreeNode> list) {
+        if (node != null) {
+            postOrder(node.left, list);
+            postOrder(node.right, list);
+            list.add(node);
         }
     }
+
+
 
     @javafx.fxml.FXML
     private void handleScrollZoom(ScrollEvent event) {
